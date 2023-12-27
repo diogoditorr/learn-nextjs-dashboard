@@ -20,8 +20,6 @@ async function seedUsers(client) {
       );
     `;
 
-    debugger
-
     console.log(`Created "users" table`);
 
     // Insert data into the "users" table
