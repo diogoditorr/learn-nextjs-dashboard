@@ -93,14 +93,15 @@ export async function fetchCardData() {
   }
 }
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 6
 export async function fetchFilteredInvoices(
   query: string,
+  limit: number,
   currentPage: number,
 ) {
   noStore()
 
-  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+  const offset = (currentPage - 1) * limit;
 
   try {
     const invoices = await sql<InvoicesTable>`
@@ -121,7 +122,7 @@ export async function fetchFilteredInvoices(
         invoices.date::text ILIKE ${`%${query}%`} OR
         invoices.status ILIKE ${`%${query}%`}
       ORDER BY invoices.date DESC
-      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+      LIMIT ${limit} OFFSET ${offset}
     `;
 
     return invoices.rows;
@@ -131,7 +132,7 @@ export async function fetchFilteredInvoices(
   }
 }
 
-export async function fetchInvoicesPages(query: string) {
+export async function fetchInvoicesPages(query: string, limit: number) {
   noStore()
 
   try {
@@ -146,7 +147,7 @@ export async function fetchInvoicesPages(query: string) {
       invoices.status ILIKE ${`%${query}%`}
   `;
 
-    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(Number(count.rows[0].count) / limit);
     return totalPages;
   } catch (error) {
     console.error('Database Error:', error);
