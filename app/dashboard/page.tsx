@@ -9,6 +9,8 @@ import {
 } from '@/app/lib/data';
 import { Card } from '../ui/dashboard/cards';
 
+export const dynamic = 'force-dynamic'
+
 export default async function Page() {
   const [
     revenue,
